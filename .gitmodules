@@ -7,3 +7,9 @@
 [submodule "Istio-Deployments"]
 	path = Istio-Deployments
 	url = git@github.com:stage-org1/Istio-Deployments.git
+[submodule "terraform-setup"]
+	path = terraform-setup
+	url = https://github.com/stage-org1/terraform-setup
+[submodule "Cluster-Configuration"]
+	path = Cluster-Configuration
+	url = https://github.com/stage-org1/Cluster-Configuration

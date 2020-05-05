@@ -1,0 +1,9 @@
+[submodule "Tekton-Deployments"]
+	path = Tekton-Deployments
+	url = git@github.com:stage-org1/Tekton-Deployments.git
+[submodule "Flux-Deployments"]
+	path = Flux-Deployments
+	url = git@github.com:stage-org1/Flux-Deployments.git
+[submodule "Istio-Deployments"]
+	path = Istio-Deployments
+	url = git@github.com:stage-org1/Istio-Deployments.git

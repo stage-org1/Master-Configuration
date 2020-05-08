@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: github-set-all-status
+spec:
+  params:
+    - name: task-names
+    - name: repo-full-name
+      default: ""
+    - name: target_url
+      default: ""
+    - name: description
+      default: ""
+    - name: revision
+      default: ""
+    - name: state
+      default: "pending"
+  steps:
+    - name: update-github
+      env:
+        - name: GITHUBTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github
+              key: token
+      image: byrnedo/alpine-curl:latest
+      script: |
+        echo "for n in $(params.task-names)"
+        for n in $(params.task-names) 
+        do
+          echo $n
+          curl -X POST -H 'Content-Type: application/json' --data '{"state":"$(params.state)", "target_url": "$(params.target_url)", "description": "$(params.description)", "context": "'${n}'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        done
+        exit 0
+
+

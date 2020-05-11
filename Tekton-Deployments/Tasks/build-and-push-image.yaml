@@ -1,0 +1,78 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: build-and-push-image
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: context
+    description: The path to the build context, used by Kaniko - within the workspace
+    default: .
+    type: string
+  - name: image-name
+    description: dockerhub url
+    type: string
+  - name: version
+    description: image-version (for instance latest or beta)
+    type: string
+  - name: repo-full-name
+    default: ""
+  - name: target_url
+    default: ""
+  - name: context
+    default: "build-and-push-image"
+  workspaces:
+  - name: source
+    mountpath: /source
+  results:
+    - name: state
+      description: state of the next github update
+    - name: description
+      description: description of the next github update
+  steps:
+    - name: update-github-finished
+      env:
+        - name: GITHUBTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github
+              key: token
+      image: curlimages/curl:latest
+      script: |
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        exit 0
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:debug 
+      env:
+        - name: "DOCKER_CONFIG"
+          value: "/tekton/home/.docker/"
+      command:
+        - '/busybox/sh'
+        - '-c'
+      args: 
+        - |-
+            #!/bin/sh
+            echo "test"
+            /kaniko/executor --dockerfile=/source/$(params.context)/dockerfile --destination=beppev/$(params.image-name):$(params.version) --context=/source/$(params.context)/ --skip-tls-verify --skip-tls-verify-pull
+            if [ "$?" = 0 ]; then
+              printf "success" > /tekton/results/state
+              printf "build and push successful, going on to publish build" > /tekton/results/description
+            else
+              printf "failure" > /tekton/results/state
+              printf "build and push were not successful use kubectl or tkn or tekton dashboard to see logs" > /tekton/results/description
+            fi
+            exit 0
+    - name: update-github-finished
+      env:
+        - name: GITHUBTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github
+              key: token
+      image: curlimages/curl:latest
+      script: |
+        state=$(cat /tekton/results/state)
+        description=$(cat /tekton/results/description)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"${state}", "target_url": "$(params.target_url)", "description": "${description}", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        exit 0

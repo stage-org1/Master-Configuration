@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: git-clone
+  namespace: tekton-pipelines
 spec:
   workspaces:
     - name: output
@@ -44,11 +45,9 @@ spec:
     - name: description
       default: ""
     - name: context
-      default: "finished"
+      default: "git-clone"
     - name: state
       default: "success"
-    - name: repo-full-name
-      default: ""
   results:
     - name: commit
       description: The precise commit SHA that was fetched by this Task

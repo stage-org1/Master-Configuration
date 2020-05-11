@@ -2,9 +2,11 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: github-set-all-status
+  namespace: tekton-pipelines
 spec:
   params:
     - name: task-names
+      description: task names seperated with a ,
     - name: repo-full-name
       default: ""
     - name: target_url

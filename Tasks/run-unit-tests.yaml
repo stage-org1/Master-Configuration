@@ -14,17 +14,23 @@ spec:
   - name: target_url
     default: ""
   - name: context
-    default: "go-lint"
+    default: "go-test"
+  - name: context-2
+    default: "go-build"
   workspaces:
   - name: source
     mountpath: /source
   results:
-    - name: state
+    - name: state-test
       description: state of the next github update
-    - name: description
+    - name: description-test
+      description: description of the next github update
+    - name: state-build
+      description: state of the next github update
+    - name: description-build
       description: description of the next github update
   steps:
-    - name: update-github-finished
+    - name: update-github-start
       env:
         - name: GITHUBTOKEN
           valueFrom:
@@ -34,16 +40,23 @@ spec:
       image: curlimages/curl:latest
       script: |
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context-1)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0
     - name: run-ci-test
       image: golang:latest
       script: |
         cd /source/${params.context}
-        go test
+        go test > /tekton/results/description-test
         if [ "$?" = 0 ]; then
-          printf "success" > /tekton/results/state
+          printf "success" > /tekton/results/state-test
         else
-          printf "failure" > /tekton/results/state
+          printf "failure" > /tekton/results/state-test
+        fi
+        go build > /tekton/results/description-build
+        if [ "$?" = 0 ]; then
+          printf "success" > /tekton/results/state-build
+        else
+          printf "failure" > /tekton/results/state-build
         fi
         exit 0
     - name: update-github-finished
@@ -55,7 +68,10 @@ spec:
               key: token
       image: curlimages/curl:latest
       script: |
-        state=$(cat /tekton/results/state)
-        description=$(cat /tekton/results/description)
+        state=$(cat /tekton/results/state-test)
+        description=$(cat /tekton/results/description-test)
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"${state}", "target_url": "$(params.target_url)", "description": "${description}", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        state=$(cat /tekton/results/state-build)
+        description=$(cat /tekton/results/description-build)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"${state}", "target_url": "$(params.target_url)", "description": "${description}", "context": "'$(params.context-2)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0

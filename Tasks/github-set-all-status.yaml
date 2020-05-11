@@ -6,6 +6,7 @@ metadata:
 spec:
   params:
     - name: task-names
+      description: task names seperated with a ,
     - name: repo-full-name
       default: ""
     - name: target_url

@@ -15,6 +15,8 @@ spec:
     default: ""
   - name: context
     default: "go-lint"
+  - name: revision
+    description: revision of the commit to add status updates to
   workspaces:
   - name: source
     mountpath: /source
@@ -24,7 +26,7 @@ spec:
     - name: description
       description: description of the next github update
   steps:
-    - name: update-github-finished
+    - name: update-github-started
       env:
         - name: GITHUBTOKEN
           valueFrom:

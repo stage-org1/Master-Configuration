@@ -20,6 +20,8 @@ spec:
     default: ""
   - name: target_url
     default: ""
+  - name: revision
+    description: revision of github commit used for statuses
   - name: context
     default: "build-and-push-image"
   workspaces:
@@ -31,7 +33,7 @@ spec:
     - name: description
       description: description of the next github update
   steps:
-    - name: update-github-finished
+    - name: update-github-started
       env:
         - name: GITHUBTOKEN
           valueFrom:

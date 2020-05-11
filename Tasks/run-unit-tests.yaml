@@ -17,6 +17,8 @@ spec:
     default: "go-test"
   - name: context-2
     default: "go-build"
+  - name: revision
+    description: revision of commit to add status updates to
   workspaces:
   - name: source
     mountpath: /source
@@ -40,7 +42,7 @@ spec:
       image: curlimages/curl:latest
       script: |
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
-        curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context-1)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context-2)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0
     - name: run-ci-test
       image: golang:latest

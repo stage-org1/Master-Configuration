@@ -64,10 +64,10 @@ spec:
     - name: foo-trig
       interceptors:
         - github:
-          eventTypes:
-            - push
+            eventTypes:
+              - push
       bindings:
-        - ref: ci-binding
+        - name: ci-binding
       template:
         name: ci-template
 ---

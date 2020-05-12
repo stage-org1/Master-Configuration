@@ -10,7 +10,6 @@ spec:
     - name: revision
       description: usually sha of commit this pipeline has to run on
     - name: repo-full-name
-
   tasks:
     - name: github-set-all-status
       taskRef:

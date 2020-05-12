@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ci-pipeline-claim
+  namespace: tekton-pipelines
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: .5Gi
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: ci-template
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: revision
+    description: The git revision
+    default: master
+  - name: repo-full-name
+    description: The git repository url
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: go-ci-pipeline-
+    spec:
+      workspaces:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: ci-pipeline-claim
+      pipelineRef:
+        name: go-ci-pipeline
+      params:
+      - name: revision
+        value: $(params.revision)
+      - name: repo-full-name
+        value: $(params.repo-full-name)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: ci-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: revision
+    value: $(body.head_commit.id)
+  - name: repo-full-name
+    value: $(body.repository.full_name)
+  - name: contenttype
+    value: $(header.Content-Type)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: ci-pipeline-listener
+  namespace: tekton-pipelines
+spec:
+  triggers:
+    - name: foo-trig
+      interceptors:
+        - github:
+          eventTypes:
+            - push
+      bindings:
+        - ref: ci-binding
+      template:
+        name: ci-template
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: github-event-listener
+  namespace: tekton-pipelines
+spec:
+  selector:
+    eventlistener: ci-pipeline-listener
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: event-listeners-ingress
+  namespace: tekton-pipelines
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: ingress-nginx.llocal.host
+      http:
+        paths:
+          - path: /ci-pipeline
+            backend: 
+              serviceName: el-ci-pipeline-listener
+              servicePort: 8080

@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: go-ci-pipeline
+  namespace: tekton-pipelines
 spec:
   workspaces:
     - name: workspace
@@ -22,6 +23,8 @@ spec:
         - name: revision
           value: $(params.revision)
     - name: git-clone
+      taskRef:
+        name: git-clone
       workspaces:
         - name: output
           workspace: workspace
@@ -33,5 +36,28 @@ spec:
         - name: repo-full-name
           value: $(params.repo-full-name)
     - name: go-lint
+      workspaces:
+        - name: source
+          workspace: workspace
       taskRef:
-        name: 
+        name: go-lint
+      params:
+        - name: context
+          value: "src"
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
+    - name: run-unit-tests
+      workspaces:
+        - name: source
+          workspace: workspace
+      taskRef:
+        name: run-unit-tests
+      params:
+        - name: context
+          value: "src"
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)

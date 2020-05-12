@@ -103,7 +103,6 @@ metadata:
   name: ci-template
   namespace: tekton-pipelines
 spec:
-  serviceAccountName: tekton-account
   params:
   - name: revision
     description: The git revision
@@ -116,6 +115,7 @@ spec:
     metadata:
       generateName: go-ci-pipeline-
     spec:
+      serviceAccountName: tekton-account
       workspaces:
         - name: workspace
           persistentVolumeClaim:

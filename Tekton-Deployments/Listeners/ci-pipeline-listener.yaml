@@ -22,6 +22,7 @@ rules:
       - "networking.k8s.io"
       - "extensions"
       - "tekton.dev"
+      - "triggers.tekton.dev"
     resources:
       - pods
       - serviceaccounts
@@ -42,6 +43,7 @@ rules:
       - pipelineruns
       - pipelineresources
       - taskruns
+      - eventlisteners
     verbs:
       - list
       - watch

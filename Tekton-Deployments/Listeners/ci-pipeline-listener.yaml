@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: tekton-account
-  namespace: tekton-pipelines-1
+  namespace: tekton-pipelines
 secrets:
   - name: regcred
 ---

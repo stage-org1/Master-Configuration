@@ -51,8 +51,6 @@ spec:
     value: $(body.head_commit.id)
   - name: repo-full-name
     value: $(body.repository.full_name)
-  - name: contenttype
-    value: $(header.Content-Type)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener

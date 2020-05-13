@@ -16,7 +16,7 @@ spec:
         name: github-set-all-status
       params:
         - name: task-names
-          value: "git-clone go-lint run-unit-tests"
+          value: "git-clone go-lint go-test go-build"
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

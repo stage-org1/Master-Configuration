@@ -24,6 +24,8 @@ spec:
     - name: git-clone
       taskRef:
         name: git-clone
+      runAfter:
+        - github-set-all-status
       workspaces:
         - name: output
           workspace: workspace
@@ -40,6 +42,8 @@ spec:
           workspace: workspace
       taskRef:
         name: go-lint
+      runAfter:
+        - git-clone
       params:
         - name: context
           value: "src"
@@ -47,12 +51,16 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
+        - name: deleteExisting
+          value: "true"
     - name: run-unit-tests
       workspaces:
         - name: source
           workspace: workspace
       taskRef:
         name: run-unit-tests
+      runAfter:
+        - git-clone
       params:
         - name: context
           value: "src"

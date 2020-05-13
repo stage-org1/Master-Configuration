@@ -36,6 +36,8 @@ spec:
           value: $(params.revision)
         - name: repo-full-name
           value: $(params.repo-full-name)
+        - name: deleteExisting
+          value: "true"
     - name: go-lint
       workspaces:
         - name: source
@@ -51,8 +53,6 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
-        - name: deleteExisting
-          value: "true"
     - name: run-unit-tests
       workspaces:
         - name: source

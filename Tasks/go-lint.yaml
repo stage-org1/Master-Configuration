@@ -41,7 +41,7 @@ spec:
       image: golangci/golangci-lint:latest
       script: |
         #!/bin/bash
-        cd /source/${params.context}
+        cd /source/$(params.context)
         golangci-lint run -v > /tekton/results/description
         if [ "$?" = 0 ]; then
           printf "success" > /tekton/results/state

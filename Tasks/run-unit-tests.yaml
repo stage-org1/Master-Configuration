@@ -48,7 +48,7 @@ spec:
       image: golang:latest
       script: |
         #!/bin/bash
-        cd /source/${params.context}
+        cd /source/$(params.context)
         go test > /tekton/results/description-test
         if [ "$?" = 0 ]; then
           printf "success" > /tekton/results/state-test

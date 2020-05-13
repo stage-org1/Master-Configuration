@@ -49,7 +49,7 @@ spec:
       script: |
         #!/bin/bash
         cd /source/$(params.context)
-        go test > /tekton/results/description-test
+        go test | grep "FAIL:\|PASS:" > /tekton/results/description-test
         if [ "$?" = 0 ]; then
           printf "success" > /tekton/results/state-test
         else
@@ -73,8 +73,8 @@ spec:
       script: |
         state=$(cat /tekton/results/state-test)
         description=$(cat /tekton/results/description-test)
-        curl -X POST -H 'Content-Type: application/json' --data '{"state":"'$state'", "target_url": "$(params.target_url)", "description": "'$description'", "context": "'$(params.github-context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"'$state'", "target_url": "$(params.target_url)", "description": "'$description'", "context": "$(params.github-context)"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         state=$(cat /tekton/results/state-build)
         description=$(cat /tekton/results/description-build)
-        curl -X POST -H 'Content-Type: application/json' --data '{"state":"'$state'", "target_url": "$(params.target_url)", "description": "'$description'", "context": "'$(params.github-context-2)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"'$state'", "target_url": "$(params.target_url)", "description": "'$description'", "context": "$(params.github-context-2)"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0

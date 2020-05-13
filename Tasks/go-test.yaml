@@ -42,7 +42,7 @@ spec:
       script: |
         #!/bin/bash
         cd /source/$(params.context)
-        go test | grep "FAIL:\|PASS:" > /tekton/results/description
+        go test -v | grep "FAIL:\|PASS:" | sed 's/---//g' | awk -v ORS=',' '1' > /tekton/results/description
         if [ "$?" = 0 ]; then
           printf "success" > /tekton/results/state
         else

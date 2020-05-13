@@ -27,6 +27,7 @@ spec:
               key: token
       image: byrnedo/alpine-curl:latest
       script: |
+        #!/bin/bash
         echo "for n in $(params.task-names)"
         for n in $(params.task-names) 
         do

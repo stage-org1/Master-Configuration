@@ -29,7 +29,7 @@ spec:
           workspace: workspace
       params:
         - name: url
-          value: github.com/$(params.repo-full-name)
+          value: https://github.com/$(params.repo-full-name)
         - name: revision
           value: $(params.revision)
         - name: repo-full-name

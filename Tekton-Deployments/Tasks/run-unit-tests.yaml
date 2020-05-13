@@ -41,12 +41,14 @@ spec:
               key: token
       image: curlimages/curl:latest
       script: |
+        #!/bin/bash
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"pending", "target_url": "$(params.target_url)", "description": "started", "context": "'$(params.context-2)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0
     - name: run-ci-test
       image: golang:latest
       script: |
+        #!/bin/bash
         cd /source/${params.context}
         go test > /tekton/results/description-test
         if [ "$?" = 0 ]; then
@@ -70,6 +72,7 @@ spec:
               key: token
       image: curlimages/curl:latest
       script: |
+        #!/bin/bash
         state=$(cat /tekton/results/state-test)
         description=$(cat /tekton/results/description-test)
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"${state}", "target_url": "$(params.target_url)", "description": "${description}", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)

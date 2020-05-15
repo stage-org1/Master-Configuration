@@ -64,7 +64,7 @@ spec:
           else
             state=failure
           fi
-          context=$line | cut -d " " -f 2
+          context=$($line | cut -d " " -f 2)
           { printf $line | cut -d " " -f 1 && printf $line | cut -d " " -f 3; } > temp.txt
           description= $(sed 'N;s/\n/ /' temp.txt)
           curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"${state}\", \"target_url\": \"$(params.target_url)\", \"description\": \"${description}\", \"context\": \"${context}\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)

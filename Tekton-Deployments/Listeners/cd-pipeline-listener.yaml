@@ -45,11 +45,11 @@ metadata:
 spec:
   params:
   - name: revision
-    value: $(body.head.sha)
+    value: $(body.pull_request.head.sha)
   - name: repo-full-name
     value: $(body.repository.full_name)
   - name: image-name
-    value: $(body.repository.name)-$(body.head.ref)
+    value: $(body.repository.name)-$(body.pull_request.head.ref)
   - name: version
     value: $(body.pull_request.head.sha)
 ---

@@ -2,7 +2,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: cd-template
+  name: release-template
   namespace: tekton-pipelines
 spec:
   params:
@@ -40,7 +40,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: cd-binding
+  name: release-binding
   namespace: tekton-pipelines
 spec:
   params:
@@ -65,7 +65,7 @@ spec:
       interceptors:
         - github:
             eventTypes:
-              - pullrequest
+              - pull_request
       bindings:
         - name: cd-binding
       template:

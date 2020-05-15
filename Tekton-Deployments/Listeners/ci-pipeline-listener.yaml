@@ -51,7 +51,7 @@ metadata:
 spec:
   serviceAccountName: tekton-account
   triggers:
-    - name: foo-trig
+    - name: github-trigger
       interceptors:
         - github:
             eventTypes:
@@ -60,33 +60,3 @@ spec:
         - name: ci-binding
       template:
         name: ci-template
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: github-event-listener
-  namespace: tekton-pipelines
-spec:
-  selector:
-    eventlistener: ci-pipeline-listener
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: event-listeners-ingress
-  namespace: tekton-pipelines
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-spec:
-  rules:
-    - host: ingress-nginx.llocal.host
-      http:
-        paths:
-          - path: /ci-pipeline
-            backend: 
-              serviceName: el-ci-pipeline-listener
-              servicePort: 8080

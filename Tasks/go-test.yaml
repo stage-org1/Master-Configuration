@@ -42,7 +42,7 @@ spec:
       script: |
         #!/bin/bash
         cd /source/$(params.context)
-        go test -v | grep "FAIL:\|PASS:" | sed 's/---//g' | awk -v ORS=',' '1' > /tekton/results/description
+        go test -v | grep "FAIL:\|PASS:" | sed 's/---//g' | sed 's/(/ /g' | sed 's/)/ /g' | awk -v ORS=',' '1' > /tekton/results/description
         if [[ $(< /tekton/results/description) == *"FAIL:"* ]]; then
           printf "failure" > /tekton/results/state
         else
@@ -60,9 +60,5 @@ spec:
       script: |
         state=$(cat /tekton/results/state)
         description=$(cat /tekton/results/description)
-        echo $description
-        echo $description | sed "s/'/ /g"
-        description = $(cat /tekton/results/description | sed "s/'/ /g")
-        echo $description
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"'$state'", "target_url": "$(params.target_url)", "description": "'$description'", "context": "$(params.github-context)"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0

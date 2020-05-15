@@ -1,0 +1,84 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: go-cd-pipeline
+  namespace: tekton-pipelines
+spec:
+  workspaces:
+    - name: workspace
+  params:
+    - name: revision
+      description: usually sha of commit this pipeline has to run on
+    - name: repo-full-name
+    - name: image-name
+    - name: version
+  tasks:
+    - name: github-set-all-status
+      taskRef:
+        name: github-set-all-status
+      params:
+        - name: task-names
+          value: "git-clone build-and-push-image deploy-yaml"
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
+    - name: git-clone
+      taskRef:
+        name: git-clone
+      runAfter:
+        - github-set-all-status
+      workspaces:
+        - name: output
+          workspace: workspace
+      params:
+        - name: url
+          value: https://github.com/$(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: deleteExisting
+          value: "true"
+    - name: build-and-push-image
+      taskRef:
+        name: build-and-push-image
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: workspace
+      params:
+        - name: context
+          value: src
+        - name: image-name
+          value: $(params.image-name)
+        - name: version
+          value: $(params.version)
+    - name: generate-manifests
+      taskRef:
+        name: generate-manifests
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: workspace
+      params: 
+        - name: template
+          value: manifests
+        - name: image-name
+          value: $(params.image-name)
+        - name: version
+          value: $(params.version)
+    - name: deploy-yaml
+      taskRef:
+        name: deploy-yaml
+      runAfter:
+        - generate-manifests
+        - build-and-push-image
+      workspaces:
+        - name: source
+          workspace: workspace
+      params:
+        - name: manifest
+          value: $(tasks.generate-manifests.results.manifest)

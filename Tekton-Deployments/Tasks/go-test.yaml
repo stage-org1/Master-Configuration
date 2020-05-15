@@ -43,8 +43,8 @@ spec:
         #!/bin/bash
         cd /source/$(params.context)
         go test -v | grep "FAIL:\|PASS:" | sed 's/---//g' | awk -v ORS=',' '1' > /tekton/results/description
-        if [ "$?" = 0 ]; then
-          printf "success" > /tekton/results/state
+        if [[ $(< /tekton/results/description) == *"FAIL:"* ]]; then
+          printf "failure" > /tekton/results/state
         else
           printf "failure" > /tekton/results/state
         fi
@@ -58,6 +58,7 @@ spec:
               key: token
       image: curlimages/curl:latest
       script: |
+        #!/bin/bash
         state=$(< /tekton/results/state)
         description=$(< /tekton/results/description)
         curl -X POST -H 'Content-Type: application/json' --data '{"state":"'$state'", "target_url": "$(params.target_url)", "description": "'$(< /tekton/results/description)'", "context": "$(params.github-context)"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)

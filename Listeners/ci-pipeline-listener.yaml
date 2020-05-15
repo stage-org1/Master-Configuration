@@ -149,9 +149,24 @@ subjects:
     name: default
     namespace: tekton-pipelines
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-# This role binding allows "dave" to read secrets in the "development" namespace.
-# You need to already have a ClusterRole named "secret-reader".
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: default-admin
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+  apiVersion: rbac.authorization.k8s.io/v1
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+# this one is needed to create new pods from inside a pod
+---
 kind: ClusterRoleBinding
 metadata:
   name: read-configmap

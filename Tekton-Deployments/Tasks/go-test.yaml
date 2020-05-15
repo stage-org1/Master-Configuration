@@ -59,7 +59,7 @@ spec:
       image: curlimages/curl:latest
       script: |
         while read line; do
-          if [[ $line == *"PASS:"* ]]; then
+          if [[ $(echo $line | cut -d " " -f 1) == "PASS:" ]]; then
             state=success
           else
             state=failure

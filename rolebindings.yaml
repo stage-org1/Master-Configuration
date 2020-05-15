@@ -1,0 +1,81 @@
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: allow-control-of-basic-kubernetes-resources-binding
+  namespace: tekton-pipelines
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: allow-control-of-basic-kubernetes-resources
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: allow-control-of-istio-resources-binding
+  namespace: tekton-pipelines
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: allow-control-of-istio-resources-resources
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: allow-control-of-tekton-resources-binding
+  namespace: tekton-pipelines
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: allow-control-of-tekton-resources-resources
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: default-admin
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
+  apiVersion: rbac.authorization.k8s.io/v1
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+# this one is needed to create new pods from inside a pod
+---
+kind: ClusterRoleBinding
+metadata:
+  name: read-configmap
+  #
+subjects:
+- kind: User
+  name: dave # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader
+  apiGroup: rbac.authorization.k8s.io

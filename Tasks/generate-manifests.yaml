@@ -6,12 +6,15 @@ metadata:
 spec:
   params:
     - name: template
-      value: manifests
+      default: "/source/manifests"
     - name: image-name
     - name: version
   results:
     - name: manifest
       description: generated manifest
+  workspaces:
+    - name: source
+      mountpath: /source
   steps:
     - name: 
       image: hairyhenderson/sed:latest

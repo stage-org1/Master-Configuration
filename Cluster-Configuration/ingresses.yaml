@@ -15,3 +15,7 @@ spec:
             backend: 
               serviceName: el-ci-pipeline-listener
               servicePort: 8080
+          - path: /cd-pipeline
+            backend:
+              serviceName: el-cd-pipeline-listener
+              servicePort: 8080

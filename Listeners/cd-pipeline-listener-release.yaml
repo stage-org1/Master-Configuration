@@ -56,7 +56,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: cd-pipeline-listener
+  name: cd-pipeline-listener-release
   namespace: tekton-pipelines
 spec:
   serviceAccountName: tekton-account
@@ -65,7 +65,7 @@ spec:
       interceptors:
         - github:
             eventTypes:
-              - pull_request
+              - releases
       bindings:
         - name: cd-binding
       template:

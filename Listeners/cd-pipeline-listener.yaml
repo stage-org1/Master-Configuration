@@ -65,7 +65,7 @@ spec:
       interceptors:
         - github:
             eventTypes:
-              - pullrequest
+              - pull_request
       bindings:
         - name: cd-binding
       template:

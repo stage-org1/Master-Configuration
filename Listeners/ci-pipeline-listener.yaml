@@ -7,43 +7,31 @@ metadata:
 secrets:
   - name: regcred
 ---
----
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: allow-creation
+  name: allow-control-of-basic-kubernetes-resources
   namespace: tekton-pipelines
 rules:
   - apiGroups:
       - ""
       - "apps"
       - "deploy"
-      - "rbac.authorization.k8s.io"
-      - "networking.k8s.io"
       - "extensions"
-      - "tekton.dev"
-      - "triggers.tekton.dev"
+      - "networking.k8s.io" #ingress object zit in extensions en networking.k8s.io
     resources:
-      - pods
-      - serviceaccounts
-      - namespaces
-      - services
+      - configmaps
+      - clusterroles
+      - clusterrolebindings
       - deployments
       - deployments.apps
-      - clusterroles
-      - roles
-      - clusterrolebindings
-      - rolebindings
       - ingresses
-      - eventlisteners
-      - triggerbindings
-      - triggertemplates
-      - configmaps
+      - namespaces
+      - pods
+      - roles
+      - rolebindings
       - secrets
-      - pipelineruns
-      - pipelineresources
-      - taskruns
-      - eventlisteners
+      - services
     verbs:
       - list
       - watch
@@ -53,16 +41,106 @@ rules:
       - patch
       - delete
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: allow-control-of-istio-resources
+  namespace: tekton-pipelines
+rules:
+  - apiGroups:
+      - "networking.istio.io"
+      - "rbac.istio.io"
+    resources:
+      - destinationrules
+      - envoryfilters
+      - gateways
+      - serviceentries
+      - servicerolebindings
+      - serviceroles
+      - sidecars
+      - virtualservices
+    verbs:
+      - list
+      - watch
+      - get
+      - create
+      - update
+      - patch
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: allow-control-of-tekton-resources
+  namespace: tekton-pipelines
+rules:
+  - apiGroups:
+      - "tekton.dev"
+      - "triggers.tekton.dev"
+    resources:
+      - clustertasks
+      - clustertriggerbindings
+      - conditions
+      - eventlisteners
+      - pipelineresources
+      - pipelineruns
+      - pipelines
+      - taskruns
+      - tasks
+      - triggerbindings
+      - triggertemplates
+    verbs:
+      - list
+      - watch
+      - get
+      - create
+      - update
+      - patch
+      - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: allow-creation-binding
+  name: allow-control-of-basic-kubernetes-resources-binding
   namespace: tekton-pipelines
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: allow-creation
+  name: allow-control-of-basic-kubernetes-resources
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: allow-control-of-istio-resources-binding
+  namespace: tekton-pipelines
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: allow-control-of-istio-resources-resources
+subjects:
+  - kind: ServiceAccount
+    name: tekton-account
+    namespace: tekton-pipelines
+  - kind: ServiceAccount
+    name: default
+    namespace: tekton-pipelines
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: allow-control-of-tekton-resources-binding
+  namespace: tekton-pipelines
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: allow-control-of-tekton-resources-resources
 subjects:
   - kind: ServiceAccount
     name: tekton-account

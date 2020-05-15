@@ -76,5 +76,5 @@ spec:
       script: |
         state=$(cat /tekton/results/state)
         description=$(cat /tekton/results/description)
-        curl -X POST -H 'Content-Type: application/json' --data '{"state":"${state}", "target_url": "$(params.target_url)", "description": "${description}", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        curl -X POST -H 'Content-Type: application/json' --data '{"state":"'${state}'", "target_url": "$(params.target_url)", "description": "'${description}'", "context": "'$(params.context)'"}' https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0

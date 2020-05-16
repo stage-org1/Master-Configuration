@@ -9,6 +9,7 @@ spec:
   params:
     - name: revision
       description: usually sha of commit this pipeline has to run on
+      default: master
     - name: repo-full-name
     - name: image-name
     - name: version

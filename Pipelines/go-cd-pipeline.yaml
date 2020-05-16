@@ -70,7 +70,7 @@ spec:
           workspace: workspace
       params: 
         - name: template
-          value: manifests
+          value: manifests.yaml
         - name: image-name
           value: $(params.image-name)
         - name: version

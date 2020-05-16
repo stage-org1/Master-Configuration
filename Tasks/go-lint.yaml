@@ -42,7 +42,7 @@ spec:
       script: |
         #!/bin/bash
         cd /source/$(params.context)
-        golangci-lint run -v > /tekton/results/description
+        golangci-lint run -v | grep ":[0-9][0-9]:[0-9][0-9]:" > /tekton/results/description
         if [ "$?" = 0 ]; then
           printf "success" > /tekton/results/state
         else
@@ -58,7 +58,19 @@ spec:
               key: token
       image: curlimages/curl:latest
       script: |
+        while read line; do
+          state=failure
+          echo $line | cut -d " " -f 1 > context
+          context=$(cat context)
+          echo $line | cut -d ":" -f 4 > temp.txt
+          description=$(sed -e 'N;s/\n/ /' -e 's:/\'/ /' -e 's:s/`/ /' temp.txt)
+          curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"${state}\", \"target_url\": \"$(params.target_url)\", \"description\": \"${description}\", \"context\": \"${context}\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        done < /tekton/results/description
         state=$(cat /tekton/results/state)
-        description=$(cat /tekton/results/description)
+        if [[ $state == "failure" ]]; then
+          description="Some linting errors occured"
+        else
+          description=" "
+        fi
         curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"{$state}\", \"target_url\": \"$(params.target_url)\", \"description": \"${description}\", \"context\": \"$(params.github-context)\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0

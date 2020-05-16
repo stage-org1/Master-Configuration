@@ -56,6 +56,10 @@ spec:
           value: $(params.image-name)
         - name: version
           value: $(params.version)
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
     - name: generate-manifests
       taskRef:
         name: generate-manifests

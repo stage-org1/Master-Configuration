@@ -64,6 +64,7 @@ spec:
           context=$(cat context)
           echo $line | cut -d ":" -f 4 > temp.txt
           description=$(sed 's/\`/ /g' temp.txt)
+          echo "failure" > /tekton/results/state
           curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"${state}\", \"target_url\": \"$(params.target_url)\", \"description\": \"${description}\", \"context\": \"${context}\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         done < /tekton/results/description
         state=$(cat /tekton/results/state)

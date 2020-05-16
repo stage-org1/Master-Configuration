@@ -51,7 +51,7 @@ spec:
   - name: image-name
     value: $(body.repository.name)-$(body.pull_request.head.ref)
   - name: version
-    value: $(body.pull_request.head.sha)
+    value: $(body.pull_request.id)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener

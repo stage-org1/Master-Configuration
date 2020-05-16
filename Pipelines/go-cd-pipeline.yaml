@@ -81,9 +81,6 @@ spec:
       runAfter:
         - generate-manifests
         - build-and-push-image
-      workspaces:
-        - name: source
-          workspace: workspace
       params:
         - name: manifest
           value: $(tasks.generate-manifests.results.manifest)

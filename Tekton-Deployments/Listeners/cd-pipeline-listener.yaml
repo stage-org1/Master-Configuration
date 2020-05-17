@@ -24,7 +24,7 @@ spec:
       workspaces:
         - name: workspace
           persistentVolumeClaim:
-            claimName: ci-pipeline-claim
+            claimName: cd-pipeline-claim
       pipelineRef:
         name: go-cd-pipeline
       params:

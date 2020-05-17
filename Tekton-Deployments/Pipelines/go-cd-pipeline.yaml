@@ -19,7 +19,7 @@ spec:
         name: github-set-all-status
       params:
         - name: task-names
-          value: "git-clone build-and-push-image deploy-yaml"
+          value: "git-clone build-and-push-image generate-manifests deploy-yaml"
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision
@@ -75,6 +75,10 @@ spec:
           value: $(params.image-name)
         - name: version
           value: $(params.version)
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
     - name: deploy-yaml
       taskRef:
         name: deploy-yaml
@@ -84,3 +88,7 @@ spec:
       params:
         - name: manifest
           value: $(tasks.generate-manifests.results.manifest)
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)

@@ -17,12 +17,15 @@ spec:
   - name: repo-full-name
   - name: revision
     default: master
+  results:
+    - name: output
+      description: output of kubectl create command
   steps:
   - name: kubeconfig
     image: $(params.image)
     script: |
       echo "$(params.manifest)" > /tmp/resource.yaml
-      kubectl create -f /tmp/resource.yaml && exit 0
+      kubectl apply -f /tmp/resource.yaml > /tekton/results/output
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

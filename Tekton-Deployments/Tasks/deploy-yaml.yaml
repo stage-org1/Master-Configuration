@@ -22,8 +22,7 @@ spec:
     image: $(params.image)
     script: |
       echo "$(params.manifest)" > /tmp/resource.yaml
-      kubectl create -f /tmp/resource.yaml
-      exit 0
+      kubectl create -f /tmp/resource.yaml && exit 0
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

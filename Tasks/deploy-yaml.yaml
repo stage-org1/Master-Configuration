@@ -10,9 +10,27 @@ spec:
   - name: image
     default: gcr.io/cloud-builders/kubectl # it is huge
     description: Kubectl wrapper image
+  - name: target_url
+    default: " "
+  - name: github-context
+    default: "generate-manifests"
+  - name: repo-full-name
+  - name: revision
+    default: master
   steps:
   - name: kubeconfig
     image: $(params.image)
     script: |
       echo "$(params.manifest)" > /tmp/resource.yaml
       kubectl create -f /tmp/resource.yaml
+  - name: update-github-finished
+      env:
+        - name: GITHUBTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github
+              key: token
+      image: curlimages/curl:latest
+      script: |
+        curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"finished\", \"target_url\": \"$(params.target_url)\", \"description\": \"generating manifests finished\", \"context\": \"$(params.github-context)\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        exit 0

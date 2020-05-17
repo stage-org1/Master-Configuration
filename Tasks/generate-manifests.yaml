@@ -9,6 +9,13 @@ spec:
       default: "/source/manifests"
     - name: image-name
     - name: version
+    - name: target_url
+      default: " "
+    - name: github-context
+      default: "generate-manifests"
+    - name: repo-full-name
+    - name: revision
+      default: master
   results:
     - name: manifest
       description: generated manifest
@@ -20,3 +27,14 @@ spec:
       image: hairyhenderson/sed:latest
       script: |
         sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" /source/$(params.template) > /tekton/results/manifest
+    - name: update-github-finished
+      env:
+        - name: GITHUBTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github
+              key: token
+      image: curlimages/curl:latest
+      script: |
+        curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"finished\", \"target_url\": \"$(params.target_url)\", \"description\": \"generating manifests finished\", \"context\": \"$(params.github-context)\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        exit 0

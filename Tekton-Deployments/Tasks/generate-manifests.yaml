@@ -36,5 +36,5 @@ spec:
               key: token
       image: curlimages/curl:latest
       script: |
-        curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"finished\", \"target_url\": \"$(params.target_url)\", \"description\": \"generating manifests finished\", \"context\": \"$(params.github-context)\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+        curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"success\", \"target_url\": \"$(params.target_url)\", \"description\": \"generating manifests finished\", \"context\": \"$(params.github-context)\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
         exit 0

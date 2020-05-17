@@ -19,3 +19,7 @@ spec:
             backend:
               serviceName: el-cd-pipeline-listener
               servicePort: 8080
+          - path: /cd-release-pipeline
+            backend:
+              serviceName: el-cd-pipeline-listener-release
+              servicePort: 8080

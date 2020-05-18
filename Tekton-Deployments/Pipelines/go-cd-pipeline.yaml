@@ -78,9 +78,12 @@ spec:
           value: $(params.version)
         - name: repo-full-name
           value: $(params.repo-full-name)
+        - name: repo-name
+          value: $(params.repo-name)
+        - name: repo-version
+          value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
-        - name: 
     - name: deploy-yaml
       taskRef:
         name: deploy-yaml

@@ -11,8 +11,9 @@ spec:
     default: master
   - name: repo-full-name
     description: The git repository url
-  - name: image-name
+  - name: repo-name
   - name: version
+  - name: repo-branch
     default: latest
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
@@ -32,10 +33,12 @@ spec:
         value: $(params.revision)
       - name: repo-full-name
         value: $(params.repo-full-name)
-      - name: image-name
-        value: $(params.image-name)
+      - name: repo-name
+        value: $(params.repo-name)
       - name: version
         value: $(params.version)
+      - name: repo-branch
+        value: $(params.repo-branch)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -48,8 +51,10 @@ spec:
     value: $(body.pull_request.head.sha)
   - name: repo-full-name
     value: $(body.repository.full_name)
-  - name: image-name
-    value: $(body.repository.name)-$(body.pull_request.head.ref)
+  - name: repo-name
+    value: $(body.repository.name)
+  - name: repo-branch
+    value: $(body.pull_request.head.ref)
   - name: version
     value: $(body.pull_request.id)
 ---

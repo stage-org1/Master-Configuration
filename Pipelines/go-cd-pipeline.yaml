@@ -11,8 +11,9 @@ spec:
       description: usually sha of commit this pipeline has to run on
       default: master
     - name: repo-full-name
-    - name: image-name
+    - name: repo-name
     - name: version
+    - name: repo-branch
   tasks:
     - name: github-set-all-status
       taskRef:
@@ -53,7 +54,7 @@ spec:
         - name: context
           value: src
         - name: image-name
-          value: $(params.image-name)
+          value: $(params.repo-name)-$(params.repo-branch)
         - name: version
           value: $(params.version)
         - name: repo-full-name
@@ -72,13 +73,14 @@ spec:
         - name: template
           value: manifests.yaml
         - name: image-name
-          value: $(params.image-name)
+          value: $(params.repo-name)-$(params.repo-branch)
         - name: version
           value: $(params.version)
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
+        - name: 
     - name: deploy-yaml
       taskRef:
         name: deploy-yaml

@@ -54,6 +54,9 @@ spec:
     - name: github-trigger
       interceptors:
         - github:
+            secretRef:
+              secretName: github-hook
+              secretKey: key
             eventTypes:
               - push
       bindings:

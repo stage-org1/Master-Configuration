@@ -32,10 +32,12 @@ spec:
         value: $(params.revision)
       - name: repo-full-name
         value: $(params.repo-full-name)
-      - name: image-name
-        value: $(params.image-name)
+      - name: repo-name
+        value: $(params.repo-name)
       - name: version
         value: $(params.version)
+      - name: repo-branch
+        value: $(params.repo-branch)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -45,11 +47,13 @@ metadata:
 spec:
   params:
   - name: revision
-    value: $(body.head.sha)
+    value: $(body.pull_request.head.sha)
   - name: repo-full-name
     value: $(body.repository.full_name)
-  - name: image-name
-    value: $(body.repository.name)-$(body.head.ref)
+  - name: repo-name
+    value: $(body.repository.name)
+  - name: repo-branch
+    value: $(body.pull_request.head.ref)
   - name: version
     value: latest
 ---
@@ -70,6 +74,6 @@ spec:
             eventTypes:
               - releases
       bindings:
-        - name: cd-binding
+        - name: release-binding
       template:
-        name: cd-template
+        name: release-template

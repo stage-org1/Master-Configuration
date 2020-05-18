@@ -16,6 +16,8 @@ spec:
     - name: repo-full-name
     - name: revision
       default: master
+    - name: deploy-type
+      default: staging
   results:
     - name: manifest
       description: generated manifest
@@ -26,7 +28,8 @@ spec:
     - name: 
       image: hairyhenderson/sed:latest
       script: |
-        sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" /source/$(params.template) > /tekton/results/manifest
+        if [[]]
+        sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" /source/$(params.template) > /tekton/results/manifest
     - name: update-github-finished
       env:
         - name: GITHUBTOKEN

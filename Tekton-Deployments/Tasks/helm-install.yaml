@@ -22,7 +22,7 @@ spec:
     image: alpine/helm:3.2.1
     script: |
       cd /source
-      helm uninstall $(params.repo-full-name)
+      echo $(helm uninstall $(params.repo-full-name))
       helm install $(params.repo-full-name) $(params.src)
   - name: update-github-finished
     env:

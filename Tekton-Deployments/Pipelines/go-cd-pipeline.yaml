@@ -29,7 +29,7 @@ spec:
               value: $(params.pull-request-action)
       params:
         - name: task-names
-          value: "git-clone build-and-push-image generate-manifests deploy-yaml"
+          value: "git-clone build-and-push-image generate-manifests helm-install"
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

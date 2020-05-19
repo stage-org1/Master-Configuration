@@ -72,7 +72,7 @@ spec:
           value: $(params.revision)
     - name: generate-values
       taskRef:
-        name: generate-values
+        name: generate-manifests
       runAfter:
         - git-clone
       workspaces:

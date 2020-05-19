@@ -40,6 +40,8 @@ spec:
         value: $(params.version)
       - name: repo-branch
         value: $(params.repo-branch)
+      - name: pull-request-action
+        value: opened
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding

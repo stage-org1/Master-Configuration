@@ -93,7 +93,7 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
-    - name: helm-install
+    - name: deploy-yaml
       taskRef:
         name: deploy-yaml
       runAfter:
@@ -104,7 +104,7 @@ spec:
           workspace: workspace
       params:
         - name: manifest
-          default: manifest.yaml
+          value: /source/manifest.yaml
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

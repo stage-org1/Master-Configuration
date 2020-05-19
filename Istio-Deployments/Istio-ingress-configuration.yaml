@@ -1,0 +1,56 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: event-listener-gateway
+  namespace: tekton-pipelines
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
+      privateKey: /etc/istio/ingressgateway-certs/tls.key
+    hosts:
+    - "istio-ingress.llocal.host"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: event-listener-vservice
+  namespace: tekton-pipelines
+spec:
+  hosts:
+  - "istio-ingress.llocal.host"
+  gateways:
+  - event-listener-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /cd-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-cd-pipeline-listener
+  - match:
+    - uri:
+        prefix: /ci-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-ci-pipeline-listener
+  - match:
+    - uri:
+        prefix: /cd-release-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-cd-pipeline-listener-release

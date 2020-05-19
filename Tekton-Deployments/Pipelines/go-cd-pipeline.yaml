@@ -70,9 +70,9 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
-    - name: generate-values.yaml
+    - name: generate-values
       taskRef:
-        name: generate-values.yaml
+        name: generate-values
       runAfter:
         - git-clone
       workspaces:
@@ -105,25 +105,6 @@ spec:
       params:
         - name: src
           value: $(params.repo-name)
-        - name: repo-full-name
-          value: $(params.repo-full-name)
-        - name: revision
-          value: $(params.revision)
-
-
-
-    - name: deploy-yaml
-      taskRef:
-        name: deploy-yaml
-      runAfter:
-        - generate-manifests
-        - build-and-push-image
-      workspaces:
-        - name: source
-          workspace: workspace
-      params:
-        - name: manifest
-          value: manifests.yaml.edited.yaml
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

@@ -104,7 +104,7 @@ spec:
           workspace: workspace
       params:
         - name: manifest
-          value: /source/manifest.yaml
+          value: /source/manifests.yaml
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

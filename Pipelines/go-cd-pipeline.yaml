@@ -79,8 +79,8 @@ spec:
         - name: source
           workspace: workspace
       params: 
-        - name: template
-          value: manifests.yaml
+        - name: values-file
+          value: /source/manifests.yaml
         - name: image-name
           value: $(params.repo-name)-$(params.repo-branch)
         - name: version
@@ -93,15 +93,18 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
-    - name: deploy-yaml
+    - name: helm-install
       taskRef:
         name: deploy-yaml
       runAfter:
-        - generate-manifests
+        - generate-helm-config
         - build-and-push-image
+      workspaces:
+        - name: source
+          workspace: workspace
       params:
         - name: manifest
-          value: $(tasks.generate-manifests.results.manifest)
+          default: manifest.yaml
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

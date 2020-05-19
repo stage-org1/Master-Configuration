@@ -1,15 +1,12 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deploy-yaml
+  name: helm-install
   namespace: tekton-pipelines
 spec:
   params:
-  - name: manifest
-    description: src of manifest
-  - name: image
-    default: gcr.io/cloud-builders/kubectl # it is huge
-    description: Kubectl wrapper image
+  - name: src
+    description: location of helm chart
   - name: target_url
     default: " "
   - name: github-context
@@ -20,15 +17,12 @@ spec:
   workspaces:
     - name: source
       mountpath: /source
-
-  results:
-    - name: output
-      description: output of kubectl create command
   steps:
-  - name: kubeconfig
-    image: $(params.image)
+  - name: helm-install
+    image: alpine/helm:3.2.1
     script: |
-      kubectl apply -f $(params.manifest) > /tekton/results/output
+      cd $(params.src)
+      helm install
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

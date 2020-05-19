@@ -7,12 +7,12 @@ spec:
   params:
   - name: src
     description: location of helm chart
+  - name: repo-name
   - name: target_url
     default: " "
   - name: github-context
     default: "helm-install"
   - name: repo-full-name
-  - name: repo-name
   - name: revision
     default: master
   workspaces:
@@ -23,8 +23,8 @@ spec:
     image: alpine/helm:3.2.1
     script: |
       cd /source
-      echo $(helm uninstall $(params.repo-full-name))
-      helm install $(params.repo-full-name) $(params.src)
+      echo $(helm uninstall $(params.repo-name))
+      helm install $(params.repo-name) $(params.src)
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

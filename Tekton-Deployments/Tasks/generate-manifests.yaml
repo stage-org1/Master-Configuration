@@ -30,6 +30,7 @@ spec:
     - name: generate-manifests
       image: hairyhenderson/sed:latest
       script: |
+        cd /source
         sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" -e "s/REPO-NAME/$(params.repo-name)/g" -e "s/REPO-BRANCH/$(params.repo-branch)/g" $(params.template) > $(params.template).edited.yaml
         cat $(params.template)
         echo $(params.template) > /tekton/results/manifest

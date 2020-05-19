@@ -22,8 +22,8 @@ spec:
     image: alpine/helm:3.2.1
     script: |
       cd /source
-      helm uninstall $(repo-full-name)
-      helm install $(repo-full-name) $(params.src)
+      helm uninstall $(params.repo-full-name)
+      helm install $(params.repo-full-name) $(params.src)
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

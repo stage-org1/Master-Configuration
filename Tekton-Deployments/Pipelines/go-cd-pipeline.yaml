@@ -79,7 +79,7 @@ spec:
         - name: source
           workspace: workspace
       params: 
-        - name: values-file
+        - name: template
           value: /source/manifests.yaml
         - name: image-name
           value: $(params.repo-name)-$(params.repo-branch)

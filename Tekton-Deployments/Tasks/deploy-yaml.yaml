@@ -30,7 +30,6 @@ spec:
     script: |
       cd /source
       ls
-      cat ./*
       cat $(params.manifest)
       kubectl apply -f $(params.manifest) > /tekton/results/output
   - name: update-github-finished

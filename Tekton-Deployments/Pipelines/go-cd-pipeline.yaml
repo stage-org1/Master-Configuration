@@ -97,7 +97,7 @@ spec:
       taskRef:
         name: deploy-yaml
       runAfter:
-        - generate-helm-config
+        - generate-manifests
         - build-and-push-image
       workspaces:
         - name: source

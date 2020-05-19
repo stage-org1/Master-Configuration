@@ -93,7 +93,7 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
-    - name: helm-install
+    - name: deploy-yaml
       taskRef:
         name: deploy-yaml
       runAfter:

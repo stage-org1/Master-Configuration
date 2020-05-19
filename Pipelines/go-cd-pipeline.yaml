@@ -80,7 +80,7 @@ spec:
           value: $(params.repo-full-name)
         - name: repo-name
           value: $(params.repo-name)
-        - name: repo-version
+        - name: repo-branch
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)

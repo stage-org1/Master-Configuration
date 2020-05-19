@@ -12,8 +12,8 @@ spec:
   - name: repo-full-name
     description: The git repository url
   - name: repo-name
-  - name: version
   - name: repo-branch
+  - name: version
     default: latest
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1

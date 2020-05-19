@@ -8,7 +8,9 @@ spec:
     - name: template
       default: "manifests.yaml"
     - name: image-name
+      default: "IMAGE-NAME"
     - name: version
+      default: "VERSION"
     - name: target_url
       default: " "
     - name: github-context

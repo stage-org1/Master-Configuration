@@ -13,6 +13,7 @@ spec:
     - name: repo-full-name
     - name: repo-name
     - name: version
+      description: version that the image will be tagged with
     - name: repo-branch
     - name: pull-request-action
       default: closed

@@ -23,3 +23,4 @@ spec:
             backend:
               serviceName: el-cd-pipeline-listener-release
               servicePort: 8080
+

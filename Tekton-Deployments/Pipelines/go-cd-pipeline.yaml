@@ -80,7 +80,7 @@ spec:
           workspace: workspace
       params: 
         - name: template
-          value: /source/manifests.yaml
+          value: manifests.yaml
         - name: image-name
           value: $(params.repo-name)-$(params.repo-branch)
         - name: version
@@ -104,7 +104,7 @@ spec:
           workspace: workspace
       params:
         - name: manifest
-          value: /source/manifests.yaml
+          value: manifests.yaml
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

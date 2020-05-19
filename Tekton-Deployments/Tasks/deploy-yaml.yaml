@@ -28,6 +28,8 @@ spec:
   - name: kubeconfig
     image: $(params.image)
     script: |
+      cd /source
+      ls
       cat $(params.manifest)
       kubectl apply -f $(params.manifest) > /tekton/results/output
   - name: update-github-finished

@@ -54,7 +54,6 @@ roleRef:
   kind: ClusterRole
   name: cluster-admin
   apiGroup: rbac.authorization.k8s.io
-  apiVersion: rbac.authorization.k8s.io/v1
 subjects:
   - kind: ServiceAccount
     name: tekton-account
@@ -64,6 +63,7 @@ subjects:
     namespace: tekton-pipelines
 # this one is needed to create new pods from inside a pod
 ---
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: read-configmap

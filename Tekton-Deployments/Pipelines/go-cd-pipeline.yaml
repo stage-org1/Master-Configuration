@@ -70,9 +70,9 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
-    - name: generate-manifests
+    - name: generate-values.yaml
       taskRef:
-        name: generate-manifests
+        name: generate-values.yaml
       runAfter:
         - git-clone
       workspaces:
@@ -80,7 +80,7 @@ spec:
           workspace: workspace
       params: 
         - name: template
-          value: manifests.yaml
+          value: $(params.repo-name)/values.yaml
         - name: image-name
           value: $(params.repo-name)-$(params.repo-branch)
         - name: version
@@ -93,6 +93,25 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
+    - name: helm-install
+      taskRef:
+        name: helm-install
+      runAfter:
+        - generate-manifests
+        - build-and-push-image
+      workspaces:
+        - name: source
+          workspace: workspace
+      params:
+        - name: src
+          value: $(params.repo-name)
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
+
+
+
     - name: deploy-yaml
       taskRef:
         name: deploy-yaml

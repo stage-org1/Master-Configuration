@@ -97,7 +97,7 @@ spec:
       taskRef:
         name: helm-install
       runAfter:
-        - generate-manifests
+        - generate-values
         - build-and-push-image
       workspaces:
         - name: source

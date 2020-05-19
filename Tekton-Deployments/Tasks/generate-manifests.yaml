@@ -32,6 +32,7 @@ spec:
       script: |
         cd /source
         ls
+        cat ./*
         sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" -e "s/REPO-NAME/$(params.repo-name)/g" -e "s/REPO-BRANCH/$(params.repo-branch)/g" $(params.template) > $(params.template)
         cat $(params.template)
         echo $(params.template) > /tekton/results/manifest

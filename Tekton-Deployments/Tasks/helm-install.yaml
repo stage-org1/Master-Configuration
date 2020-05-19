@@ -12,6 +12,7 @@ spec:
   - name: github-context
     default: "helm-install"
   - name: repo-full-name
+  - name: repo-name
   - name: revision
     default: master
   workspaces:

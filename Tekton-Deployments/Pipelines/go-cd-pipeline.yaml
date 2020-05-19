@@ -14,10 +14,19 @@ spec:
     - name: repo-name
     - name: version
     - name: repo-branch
+    - name: pull-request-action
+      default: closed
   tasks:
     - name: github-set-all-status
       taskRef:
         name: github-set-all-status
+      conditions:
+        - conditionRef: is-not-equal
+          params:
+            - name: left
+              value: "closed"
+            - name: right
+              value: $(params.pull-request-action)
       params:
         - name: task-names
           value: "git-clone build-and-push-image generate-manifests deploy-yaml"

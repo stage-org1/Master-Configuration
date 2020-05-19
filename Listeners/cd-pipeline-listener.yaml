@@ -60,7 +60,7 @@ spec:
   - name: repo-branch
     value: $(body.pull_request.head.ref)
   - name: version
-    value: $(body.pull_request.id)
+    value: $(body.pull_request.head.ref)-latest
   - name: pull-request-action
     value: $(body.action)
 ---

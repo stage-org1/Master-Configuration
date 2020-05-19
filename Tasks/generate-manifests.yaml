@@ -31,7 +31,8 @@ spec:
       image: hairyhenderson/sed:latest
       script: |
         sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" -e "s/REPO-NAME/$(params.repo-name)/g" -e "s/REPO-BRANCH/$(params.repo-branch)/g" $(params.template) > $(params.template)
-          echo $(params.template) > /tekton/results/manifest
+        cat $(params.template)
+        echo $(params.template) > /tekton/results/manifest
     - name: update-github-finished
       env:
         - name: GITHUBTOKEN

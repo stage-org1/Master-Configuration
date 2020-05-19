@@ -6,7 +6,7 @@ metadata:
 spec:
   params:
     - name: template
-      default: "/source/manifests"
+      default: "/source/manifests.yaml"
     - name: image-name
     - name: version
     - name: target_url

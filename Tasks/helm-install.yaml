@@ -10,7 +10,7 @@ spec:
   - name: target_url
     default: " "
   - name: github-context
-    default: "deploy-yaml"
+    default: "helm-install"
   - name: repo-full-name
   - name: revision
     default: master
@@ -21,8 +21,9 @@ spec:
   - name: helm-install
     image: alpine/helm:3.2.1
     script: |
-      cd $(params.src)
-      helm install
+      cd /source
+      helm uninstall $(repo-full-name)
+      helm install $(repo-full-name) $(params.src)
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

@@ -85,7 +85,7 @@ spec:
         - name: image-name
           value: $(params.repo-name)
         - name: version
-          value: $(params.repo-branch)-latest
+          value: $(params.version)
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: repo-name

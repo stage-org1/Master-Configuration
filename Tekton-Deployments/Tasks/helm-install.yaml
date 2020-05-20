@@ -28,7 +28,7 @@ spec:
     image: alpine/helm:3.1.3
     script: |
       cd /source
-      helm upgrade --install --force $(params.repo-name) $(params.src) > /tekton/results/description
+      helm install --replace $(params.repo-name) $(params.src) > /tekton/results/description
       if [ "$?" = 0 ]; then
         printf "success" > /tekton/results/state
       else

@@ -38,7 +38,7 @@ spec:
       - name: repo-name
         value: $(params.repo-name)
       - name: version
-        value: $(params.version)
+        value: $(params.repo-branch)-latest
       - name: repo-branch
         value: $(params.repo-branch)
       - name: pull-request-action

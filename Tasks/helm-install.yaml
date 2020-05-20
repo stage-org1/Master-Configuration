@@ -29,11 +29,7 @@ spec:
     script: |
       cd /source
       exists=$(helm list | grep $(params.release-name))
-      if [[ ${#exists} == 0 ]]; then
-        helm install $(params.src) -n $(params.release-name)
-      else
-        helm upgrade --install --force $(params.release-name) $(params.src) > /tekton/results/description
-      fi
+      helm install $(params.src) -n $(params.src)
       if [ "$?" = 0 ]; then
         printf "success" > /tekton/results/state
       else

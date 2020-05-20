@@ -23,7 +23,7 @@ spec:
     image: alpine/helm:3.2.1
     script: |
       cd /source
-      helm upgrade --install --force $(params.repo-name) $(params.src)
+      helm upgrade --install -force $(params.repo-name) $(params.src)
   - name: update-github-finished
     env:
       - name: GITHUBTOKEN

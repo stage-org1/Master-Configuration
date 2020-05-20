@@ -106,8 +106,8 @@ spec:
       params:
         - name: src
           value: $(params.repo-name)
-        - name: repo-name
-          value: $(params.repo-name)
+        - name: release-name
+          value: $(params.repo-branch)
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

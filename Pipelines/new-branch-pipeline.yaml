@@ -35,7 +35,7 @@ spec:
       taskRef:
         name: generate-manifests-no-update
       runAfter:
-        - git-clone
+        - git-clone-no-update
       workspaces:
         - name: source
           workspace: workspace
@@ -58,7 +58,7 @@ spec:
       taskRef:
         name: helm-install
       runAfter:
-        - generate-values
+        - generate-values-no-update
       workspaces:
         - name: source
           workspace: workspace

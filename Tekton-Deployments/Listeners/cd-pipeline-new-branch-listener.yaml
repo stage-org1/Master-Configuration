@@ -19,7 +19,7 @@ spec:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      generateName: go-cd-pipeline-
+      generateName: new-branch-pipeline-
     spec:
       serviceAccountName: tekton-account
       workspaces:

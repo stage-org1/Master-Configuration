@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: go-cd-pipeline
+  name: new-branch-pipeline
   namespace: tekton-pipelines
 spec:
   workspaces:
@@ -15,31 +15,10 @@ spec:
     - name: version
       description: version that the image will be tagged with
     - name: repo-branch
-    - name: pull-request-action
-      default: closed
   tasks:
-    - name: github-set-all-status
+    - name: git-clone-no-update
       taskRef:
-        name: github-set-all-status
-      conditions:
-        - conditionRef: is-not-equal
-          params:
-            - name: left
-              value: "closed"
-            - name: right
-              value: $(params.pull-request-action)
-      params:
-        - name: task-names
-          value: "git-clone build-and-push-image generate-manifests helm-install"
-        - name: repo-full-name
-          value: $(params.repo-full-name)
-        - name: revision
-          value: $(params.revision)
-    - name: git-clone
-      taskRef:
-        name: git-clone
-      runAfter:
-        - github-set-all-status
+        name: git-clone-no-update
       workspaces:
         - name: output
           workspace: workspace
@@ -52,28 +31,9 @@ spec:
           value: $(params.repo-full-name)
         - name: deleteExisting
           value: "true"
-    - name: build-and-push-image
+    - name: generate-values-no-update
       taskRef:
-        name: build-and-push-image
-      runAfter:
-        - git-clone
-      workspaces:
-        - name: source
-          workspace: workspace
-      params:
-        - name: context
-          value: src
-        - name: image-name
-          value: $(params.repo-name)-$(params.repo-branch)
-        - name: version
-          value: $(params.version)
-        - name: repo-full-name
-          value: $(params.repo-full-name)
-        - name: revision
-          value: $(params.revision)
-    - name: generate-values
-      taskRef:
-        name: generate-manifests
+        name: generate-manifests-no-update
       runAfter:
         - git-clone
       workspaces:
@@ -94,12 +54,11 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
-    - name: helm-upgrade
+    - name: helm-install
       taskRef:
-        name: helm-upgrade
+        name: helm-install
       runAfter:
         - generate-values
-        - build-and-push-image
       workspaces:
         - name: source
           workspace: workspace

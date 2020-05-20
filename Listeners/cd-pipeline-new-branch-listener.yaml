@@ -1,0 +1,80 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: new-branch-template
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: revision
+    description: The git revision
+    default: master
+  - name: repo-full-name
+    description: The git repository url
+  - name: repo-name
+  - name: repo-branch
+  - name: version
+    default: latest
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: go-cd-pipeline-
+    spec:
+      serviceAccountName: tekton-account
+      workspaces:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: cd-pipeline-claim
+      pipelineRef:
+        name: new-branch-pipeline
+      params:
+      - name: revision
+        value: $(params.revision)
+      - name: repo-full-name
+        value: $(params.repo-full-name)
+      - name: repo-name
+        value: $(params.repo-name)
+      - name: version
+        value: $(params.repo-branch)-latest
+      - name: repo-branch
+        value: $(params.repo-branch)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: new-branch-binding
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: revision
+    value: $(body.ref)
+  - name: repo-full-name
+    value: $(body.repository.full_name)
+  - name: repo-name
+    value: $(body.repository.name)
+  - name: repo-branch
+    value: $(body.ref)
+  - name: version
+    value: $(body.ref)-latest
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: new-branch-listener
+  namespace: tekton-pipelines
+spec:
+  serviceAccountName: tekton-account
+  triggers:
+    - name: github-trigger
+      interceptors:
+        - github:
+            secretRef:
+              secretName: github-hook
+              secretKey: key
+            eventTypes:
+              - create
+      bindings:
+        - name: new-branch-binding
+      template:
+        name: new-branch-template

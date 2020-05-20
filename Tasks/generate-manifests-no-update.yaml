@@ -1,0 +1,40 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: generate-manifests-no-update
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: template
+      default: "manifests.yaml"
+    - name: image-name
+      default: "IMAGE-NAME"
+    - name: version
+      default: "VERSION"
+    - name: target_url
+      default: " "
+    - name: github-context
+      default: "generate-manifests"
+    - name: repo-full-name
+    - name: revision
+      default: master
+    - name: deploy-type
+      default: staging
+    - name: repo-name
+    - name: repo-branch
+  results:
+    - name: manifest
+      description: generated manifest
+  workspaces:
+    - name: source
+      mountpath: /source
+  steps:
+    - name: generate-manifests
+      image: hairyhenderson/sed:latest
+      script: |
+        cd /source
+        sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" -e "s/REPO-NAME/$(params.repo-name)/g" -e "s/REPO-BRANCH/$(params.repo-branch)/g" $(params.template) > $(params.template).edited
+        rm $(params.template)
+        mv $(params.template).edited $(params.template)
+        cat $(params.template)
+        echo $(params.template) > /tekton/results/manifest

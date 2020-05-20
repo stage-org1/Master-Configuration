@@ -1,0 +1,50 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: helm-upgrade
+  namespace: tekton-pipelines
+spec:
+  params:
+  - name: src
+    description: location of helm chart
+  - name: release-name
+  - name: target_url
+    default: " "
+  - name: github-context
+    default: "helm-install"
+  - name: repo-full-name
+  - name: revision
+    default: master
+  workspaces:
+    - name: source
+      mountpath: /source
+  results:
+    - name: state
+      description: state
+    - name: description
+      description: description
+  steps:
+  - name: helm-install
+    image: alpine/helm:3.1.3
+    script: |
+      cd /source
+      helm upgrade --force $(params.release-name) ./$(params.src) 
+      if [ "$?" = 0 ]; then
+        printf "success" > /tekton/results/state
+      else
+        printf "failure" > /tekton/results/state
+      fi
+      exit 0
+  - name: update-github-finished
+    env:
+      - name: GITHUBTOKEN
+        valueFrom:
+          secretKeyRef:
+            name: github
+            key: token
+    image: curlimages/curl:latest
+    script: |
+      state=$(cat /tekton/results/state)
+      description=""
+      curl -X POST -H 'Content-Type: application/json' --data "{\"state\":\"${state}\", \"target_url\": \"$(params.target_url)\", \"description\": \"${description}\", \"context\": \"$(params.github-context)\"}" https://$GITHUBTOKEN:x-oauth-basic@api.github.com/repos/$(params.repo-full-name)/statuses/$(params.revision)
+      exit 0

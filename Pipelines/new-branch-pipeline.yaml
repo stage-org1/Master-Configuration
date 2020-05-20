@@ -43,9 +43,9 @@ spec:
         - name: template
           value: $(params.repo-name)/values.yaml
         - name: image-name
-          value: $(params.repo-name)-$(params.repo-branch)
+          value: $(params.repo-name)
         - name: version
-          value: $(params.version)
+          value: $(params.repo-branch)-latest
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: repo-name

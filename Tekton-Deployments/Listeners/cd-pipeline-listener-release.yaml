@@ -51,13 +51,13 @@ metadata:
 spec:
   params:
   - name: revision
-    value: $(body.pull_request.head.sha)
+    value: master
   - name: repo-full-name
     value: $(body.repository.full_name)
   - name: repo-name
     value: $(body.repository.name)
   - name: repo-branch
-    value: $(body.pull_request.head.ref)
+    value: master
   - name: version
     value: latest
 ---
@@ -76,7 +76,7 @@ spec:
               secretName: github-hook
               secretKey: key
             eventTypes:
-              - releases
+              - release
       bindings:
         - name: release-binding
       template:

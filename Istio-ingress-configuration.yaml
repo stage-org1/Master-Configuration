@@ -60,3 +60,11 @@ spec:
         port:
           number: 8080
         host: el-cd-pipeline-listener-release
+  - match:
+    - uri:
+        prefix: /new-branch
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-new-branch-listener

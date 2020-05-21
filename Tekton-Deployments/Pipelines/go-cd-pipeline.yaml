@@ -94,6 +94,23 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
+    - name: helm-install
+      taskRef:
+        name: helm-install
+      runAfter:
+        - generate-values
+      workspaces:
+        - name: source
+          workspace: workspace
+      params:
+        - name: src
+          value: $(params.repo-name)
+        - name: release-name
+          value: $(params.repo-name)
+        - name: repo-full-name
+          value: $(params.repo-full-name)
+        - name: revision
+          value: $(params.revision)
     - name: helm-upgrade
       taskRef:
         name: helm-upgrade

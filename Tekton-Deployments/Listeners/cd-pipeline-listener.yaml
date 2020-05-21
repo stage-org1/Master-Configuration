@@ -38,7 +38,7 @@ spec:
       - name: repo-name
         value: $(params.repo-name)
       - name: version
-        value: $(params.repo-branch)-latest
+        value: $(params.version)
       - name: repo-branch
         value: $(params.repo-branch)
       - name: pull-request-action
@@ -60,7 +60,7 @@ spec:
   - name: repo-branch
     value: $(body.pull_request.head.ref)
   - name: version
-    value: $(body.pull_request.head.ref)-latest
+    value: $(body.pull_request.id)
   - name: pull-request-action
     value: $(body.action)
 ---

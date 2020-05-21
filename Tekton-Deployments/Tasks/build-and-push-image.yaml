@@ -10,6 +10,7 @@ spec:
     description: The path to the build context, used by Kaniko - within the workspace
     default: .
     type: string
+  - name: branch
   - name: image-name
     description: dockerhub url
     type: string
@@ -65,6 +66,11 @@ spec:
               printf "build and push were not successful use kubectl or tkn or tekton dashboard to see logs" > /tekton/results/description
             fi
             exit 0
+    - name: set-latest
+      image: gcr.io/cloud-builders/kubectl
+      script: |
+        kubectl delete configmap -n tekton-pipelines $(params.branch) || true
+        kubectl create configmap -n tekton-pipelines $(params.branch) --from-literal=version=$(params.version)
     - name: update-github-finished
       env:
         - name: GITHUBTOKEN

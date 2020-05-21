@@ -28,6 +28,11 @@ spec:
     image: alpine/helm:3.1.3
     script: |
       cd /source
+      if [[ $(helm list | grep $(params.release-name)) == *"$(params.release-name)"* ]]; then
+        echo "installed"
+      else
+        helm install $(params.release-name) ./$(params.src) --replace > temp.txt
+      fi
       helm upgrade --force $(params.release-name) ./$(params.src) 
       if [ "$?" = 0 ]; then
         printf "success" > /tekton/results/state

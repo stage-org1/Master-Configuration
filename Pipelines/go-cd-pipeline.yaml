@@ -71,6 +71,8 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
+        - name: branch
+          value: $(params.repo-branch)
     - name: generate-values
       taskRef:
         name: generate-manifests

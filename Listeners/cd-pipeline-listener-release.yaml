@@ -59,7 +59,7 @@ spec:
   - name: repo-branch
     value: master
   - name: version
-    value: latest
+    value: $(body.release.tag_name)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener

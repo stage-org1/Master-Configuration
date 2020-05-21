@@ -39,11 +39,11 @@ spec:
               key: version
       script: |
         cd /source
-        sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" -e "s/REPO-NAME/$(params.repo-name)/g" -e "s/REPO-BRANCH/$(params.repo-branch)/g" -e "s/MASTER-VERSION/${MASTERVERSION}/g" $(params.template) > $(params.template).edited
+        sed -e "s/IMAGE-NAME/$(params.image-name)/g" -e "s/VERSION/$(params.version)/g" -e "s/DEPLOY-TYPE/$(params.deploy-type)/g" -e "s/REPO-NAME/$(params.repo-name)/g" -e "s/REPO-BRANCH/$(params.repo-branch)/g" -e "s/MASTER/${MASTERVERSION}/g" $(params.template) > $(params.template).edited
         rm $(params.template)
         mv $(params.template).edited $(params.template)
         cat $(params.template)
-        echo $(params.template) > /tekton/results/manifest)
+        echo $(params.template) > /tekton/results/manifest
     - name: update-github-finished
       env:
         - name: GITHUBTOKEN

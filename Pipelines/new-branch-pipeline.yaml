@@ -15,10 +15,19 @@ spec:
     - name: version
       description: version that the image will be tagged with
     - name: repo-branch
+    - name: type
+      description: payload type
   tasks:
     - name: git-clone-no-update
       taskRef:
         name: git-clone-no-update
+      conditions:
+        - conditionRef: is-equal
+          params:
+            - name: left
+              value: "branch"
+            - name: right
+              value: $(params.type)
       workspaces:
         - name: output
           workspace: workspace

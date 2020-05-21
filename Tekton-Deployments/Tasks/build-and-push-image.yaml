@@ -69,8 +69,8 @@ spec:
     - name: set-latest
       image: gcr.io/cloud-builders/kubectl
       script: |
-        kubectl delete configmap -n tekton-pipelines $(image-name)$(params.branch) || true
-        kubectl create configmap -n tekton-pipelines $(image-name)$(params.branch) --from-literal=version=$(params.version)
+        kubectl delete configmap -n tekton-pipelines $(params.image-name)$(params.branch) || true
+        kubectl create configmap -n tekton-pipelines $(params.image-name)$(params.branch) --from-literal=version=$(params.version)
     - name: update-github-finished
       env:
         - name: GITHUBTOKEN

@@ -35,7 +35,7 @@ spec:
         - name: MASTERVERSION
           valueFrom:
             configMapKeyRef:
-              name: master
+              name: $(params.image-name)-master
               key: version
       script: |
         cd /source

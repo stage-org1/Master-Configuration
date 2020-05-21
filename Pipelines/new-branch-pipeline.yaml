@@ -75,7 +75,7 @@ spec:
         - name: src
           value: $(params.repo-name)
         - name: release-name
-          value: $(params.repo-branch)
+          value: $(params.repo-name)/$(params.repo-branch)
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision

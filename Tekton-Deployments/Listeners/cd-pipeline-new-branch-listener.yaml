@@ -15,6 +15,7 @@ spec:
   - name: repo-branch
   - name: version
     default: latest
+  - name: type
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -39,6 +40,8 @@ spec:
         value: $(params.repo-branch)-latest
       - name: repo-branch
         value: $(params.repo-branch)
+      - name: type
+        value: $(params.type)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -57,6 +60,8 @@ spec:
     value: $(body.ref)
   - name: version
     value: $(body.ref)-latest
+  - name: type
+    value: $(body.ref_type)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener

@@ -23,7 +23,7 @@ spec:
       name: http
       protocol: http
     hosts:
-      - "istio-ingress.llocal.host"
+      - "*"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -32,7 +32,7 @@ metadata:
   namespace: tekton-pipelines
 spec:
   hosts:
-  - "istio-ingress.llocal.host"
+  - "*"
   gateways:
   - event-listener-gateway
   http:

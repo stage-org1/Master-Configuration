@@ -6,8 +6,8 @@ metadata:
 spec:
   params:
     - name: src
-    - name: image-name-master
-    - name: image-name-experimental
+    - name: image-name
+    - name: experimental-version
   workspaces:
     - name: source
       mountpath: /source
@@ -21,6 +21,6 @@ spec:
               name: $(params.image-name)master
               key: version
       script: |
-        yq w -i /source/$(params.src) image.master $(params.image-name-master):${MASTERVERSION}
-        yq w -i /source/$(params.src) image.experimental $(params.image-name-experimental)
+        yq w -i /source/$(params.src) image.master $(params.image-name):${MASTERVERSION}
+        yq w -i /source/$(params.src) image.experimental $(params.image-name):$(params.experimental-version)
 

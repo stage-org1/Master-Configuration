@@ -38,7 +38,10 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /cd-pipeline
+        prefix: /tekton
+    - headers:
+        X-GitHub-Event:
+          exact: pull_request 
     route:
     - destination:
         port:
@@ -46,7 +49,10 @@ spec:
         host: el-cd-pipeline-listener
   - match:
     - uri:
-        prefix: /ci-pipeline
+        prefix: /tekton
+    - headers:
+        X-GitHub-Event:
+          exact: push 
     route:
     - destination:
         port:
@@ -54,17 +60,12 @@ spec:
         host: el-ci-pipeline-listener
   - match:
     - uri:
-        prefix: /cd-release-pipeline
+        prefix: /tekton
+    - headers:
+        X-GitHub-Event:
+          exact: release 
     route:
     - destination:
         port:
           number: 8080
         host: el-cd-pipeline-listener-release
-  - match:
-    - uri:
-        prefix: /new-branch
-    route:
-    - destination:
-        port:
-          number: 8080
-        host: el-new-branch-listener

@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: yq
+  namespace: tekton-pipelines
+spec:
+  params:
+    - name: src
+    - name: image-name-master
+    - name: image-name-experimental
+  workspaces:
+    - name: source
+      mountpath: /source
+  steps:
+    - name: yq
+      image: mikefarah/yq:latest
+      env:
+        - name: MASTERVERSION
+          valueFrom:
+            configMapKeyRef:
+              name: $(params.image-name)master
+              key: version
+      script: |
+        yq w -i /source/$(params.src) image.master $(params.image-name-master):${MASTERVERSION}
+        yq w -i /source/$(params.src) image.experimental $(params.image-name-experimental)
+

@@ -66,18 +66,33 @@ spec:
         - name: image-name
           value: $(params.repo-name)
         - name: version
-          value: $(params.version)
+          value: v$(params.version)
         - name: repo-full-name
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
         - name: branch
           value: $(params.repo-branch)
+    - name: yq
+      taskRef:
+        name: yq
+      runAfter:
+        - git-clone
+      workspaces:
+        - name: source
+          workspace: workspace
+      params:
+        - name: src
+          value: $(params.repo-name)/values.yaml
+        - name: image-name-experimental
+          value: $(params.image-name):v$(params.version)
+        - name: image-name-master
+          value: $(params.image-name)
     - name: generate-values
       taskRef:
         name: generate-manifests
       runAfter:
-        - git-clone
+        - helm-upgrade
       workspaces:
         - name: source
           workspace: workspace
@@ -96,12 +111,11 @@ spec:
           value: $(params.repo-branch)
         - name: revision
           value: $(params.revision)
-
     - name: helm-upgrade
       taskRef:
         name: helm-upgrade
       runAfter:
-        - generate-values
+        - yq
         - build-and-push-image
       workspaces:
         - name: source
@@ -115,3 +129,10 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
+    - name: labeled
+      taskRef:
+        name: set-split
+      runAfter:
+        - git-clone
+
+

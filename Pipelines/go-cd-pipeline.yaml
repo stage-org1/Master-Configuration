@@ -84,10 +84,10 @@ spec:
       params:
         - name: src
           value: $(params.repo-name)/values.yaml
-        - name: image-name-experimental
-          value: $(params.repo-name):v$(params.version)
-        - name: image-name-master
+        - name: image-name
           value: $(params.repo-name)
+        - name: experimental-version
+          value: v$(params.version)
     - name: generate-values
       taskRef:
         name: generate-manifests

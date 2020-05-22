@@ -129,10 +129,4 @@ spec:
           value: $(params.repo-full-name)
         - name: revision
           value: $(params.revision)
-    - name: labeled
-      taskRef:
-        name: set-split
-      runAfter:
-        - git-clone
-
 

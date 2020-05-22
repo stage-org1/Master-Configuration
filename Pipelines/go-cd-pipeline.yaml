@@ -85,9 +85,9 @@ spec:
         - name: src
           value: $(params.repo-name)/values.yaml
         - name: image-name-experimental
-          value: $(params.image-name):v$(params.version)
+          value: $(params.repo-name):v$(params.version)
         - name: image-name-master
-          value: $(params.image-name)
+          value: $(params.repo-name)
     - name: generate-values
       taskRef:
         name: generate-manifests

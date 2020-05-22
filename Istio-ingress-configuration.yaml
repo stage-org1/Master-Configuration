@@ -37,8 +37,6 @@ spec:
   - event-listener-gateway
   http:
   - match:
-    - uri:
-        prefix: /tekton
     - headers:
         X-GitHub-Event:
           exact: pull_request 
@@ -48,8 +46,6 @@ spec:
           number: 8080
         host: el-cd-pipeline-listener
   - match:
-    - uri:
-        prefix: /tekton
     - headers:
         X-GitHub-Event:
           exact: push 
@@ -59,8 +55,6 @@ spec:
           number: 8080
         host: el-ci-pipeline-listener
   - match:
-    - uri:
-        prefix: /tekton
     - headers:
         X-GitHub-Event:
           exact: release 

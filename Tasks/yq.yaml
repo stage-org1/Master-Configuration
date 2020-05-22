@@ -21,6 +21,6 @@ spec:
               name: $(params.image-name)master
               key: version
       script: |
-        yq w -i /source/$(params.src) image.master $(params.image-name):${MASTERVERSION}
-        yq w -i /source/$(params.src) image.experimental $(params.image-name):$(params.experimental-version)
+        yq w -i /source/$(params.src) image.master "beppev/$(params.image-name):${MASTERVERSION}""
+        yq w -i /source/$(params.src) image.experimental "beppev/$(params.image-name):$(params.experimental-version)"
 

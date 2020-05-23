@@ -88,29 +88,6 @@ spec:
           value: $(params.repo-name)
         - name: experimental-version
           value: v$(params.version)
-    - name: generate-values
-      taskRef:
-        name: generate-manifests
-      runAfter:
-        - helm-upgrade
-      workspaces:
-        - name: source
-          workspace: workspace
-      params: 
-        - name: template
-          value: $(params.repo-name)/values.yaml
-        - name: image-name
-          value: $(params.repo-name)
-        - name: version
-          value: $(params.version)
-        - name: repo-full-name
-          value: $(params.repo-full-name)
-        - name: repo-name
-          value: $(params.repo-name)
-        - name: repo-branch
-          value: $(params.repo-branch)
-        - name: revision
-          value: $(params.revision)
     - name: helm-upgrade
       taskRef:
         name: helm-upgrade

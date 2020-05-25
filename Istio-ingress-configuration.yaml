@@ -9,16 +9,6 @@ spec:
     istio: ingressgateway 
   servers:
   - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
-      privateKey: /etc/istio/ingressgateway-certs/tls.key
-    hosts:
-      - "istio-ingress.llocal.host"
-  - port:
       number: 80
       name: http
       protocol: http

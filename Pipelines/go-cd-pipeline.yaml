@@ -28,6 +28,18 @@ spec:
               value: "closed"
             - name: right
               value: $(params.pull-request-action)
+        - conditionRef: is-not-equal
+          params:
+            - name: left
+              value: "released"
+            - name: right
+              value: $(params.pull-request-action)
+        - conditionRef: is-not-equal
+          params:
+            - name: left
+              value: "created"
+            - name: right
+              value: $(params.pull-request-action)
       params:
         - name: task-names
           value: "git-clone build-and-push-image generate-manifests helm-install"

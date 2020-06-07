@@ -56,7 +56,6 @@ spec:
       args: 
         - |-
             #!/bin/sh
-            echo "test"
             /kaniko/executor --dockerfile=/source/$(params.context)/dockerfile --destination=beppev/$(params.image-name):$(params.version) --context=/source/$(params.context)/ --skip-tls-verify --skip-tls-verify-pull
             if [ "$?" = 0 ]; then
               printf "success" > /tekton/results/state
